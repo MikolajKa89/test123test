@@ -2,9 +2,10 @@ from flask import Flask, render_template, request, jsonify
 import sqlite3
 from datetime import date
 
+# Tworzymy aplikację Flask
 app = Flask(__name__)
 
-# Inicjalizacja bazy danych
+# === Inicjalizacja bazy danych SQLite ===
 def init_db():
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
@@ -23,12 +24,12 @@ def init_db():
     conn.commit()
     conn.close()
 
-# Strona główna
+# === Główna strona frontendowa ===
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html')  # Flask automatycznie szuka w folderze `templates`
 
-# API do obsługi leków
+# === API do obsługi leków ===
 @app.route('/api/leki', methods=['GET', 'POST', 'DELETE'])
 def leki():
     if request.method == 'POST':
@@ -36,15 +37,16 @@ def leki():
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
         c.execute(
-            "INSERT INTO leki (nazwa, dawka, godzina, ilosc, data_start, data_end, kolor) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            '''INSERT INTO leki (nazwa, dawka, godzina, ilosc, data_start, data_end, kolor)
+               VALUES (?, ?, ?, ?, ?, ?, ?)''',
             (
                 data['nazwa'],
-                data['dawka'],
-                data['godzina'],
-                data['ilosc'],
+                data.get('dawka', ''),
+                data.get('godzina', ''),
+                data.get('ilosc', 0),
                 data['data_start'],
                 data['data_end'],
-                data['kolor']
+                data.get('kolor', '#2196f3')
             )
         )
         conn.commit()
@@ -79,7 +81,7 @@ def leki():
         conn.close()
         return jsonify({"status": "deleted"})
 
-# Uruchomienie aplikacji
+# === Uruchomienie serwera ===
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)
