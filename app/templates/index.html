@@ -4,8 +4,11 @@
   <meta charset="UTF-8" />
   <title>Przypominajka o lekach</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/static/style.css" />
+
+  <!-- Poprawna ścieżka do CSS (Flask) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-calendar@1.4.0/build/vanilla-calendar.min.css" />
+
   <script src="https://cdn.jsdelivr.net/npm/vanilla-calendar@1.4.0/build/vanilla-calendar.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
@@ -66,6 +69,7 @@
     </div>
   </div>
 
-  <script src="/static/script.js"></script>
+  <!-- Poprawna ścieżka do JS (Flask) -->
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
